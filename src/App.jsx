@@ -26,9 +26,8 @@ function App() {
   }
 });
 
-function ChangeFormData(newValue){ 
-  console.log(formData.personal.name)
-   setFormData(formData.newValue = newValue)
+function ChangeFormData(tab, e) {
+
 }
 
 
