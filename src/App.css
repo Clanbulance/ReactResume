@@ -1,0 +1,134 @@
+#root {
+  
+  margin: 0 ;
+
+  display: grid;
+  grid-template-columns: repeat(6,1fr);
+  grid-template-rows: repeat(auto,1fr);
+  
+}
+
+
+p{
+    font-size: clamp(0.5rem, 2vw, 1.25rem);
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+}
+html {
+    min-height: 100vh;
+}
+
+img{
+    display: block;
+    max-width: 100%;
+}
+
+.inputPage{
+  grid-column: 1 / 4;
+  border: var(--test-border);
+
+  padding:1rem;
+  
+}
+
+.inputPage a{
+  font-size: clamp(2px,32px,1em);
+}
+
+.resumePage{
+  grid-column: 4 / 7;
+  border: var(--test-border);
+
+  padding:1rem;
+}
+
+.inputFeatures{
+  border-right: var(--border-card-level1);
+  padding-right: 0.5em;
+  gap:1rem
+}
+
+.FeatureItems{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  border-bottom: 2px solid rgb(6, 0, 90);
+  border-right: 2px solid rgb(6, 0, 90);
+  border-radius: 16px;
+  padding: 0.5em;
+  scale: 1;
+}
+
+.FeatureItems:hover{
+  transform: scale(1.1);
+  box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem  black;
+
+}
+
+.FeatureItems img{
+  min-width: 1em;
+}
+
+.LoadedFeatures{
+  padding-left: 0.5em;
+  display: flex;
+  flex-flow: nowrap;
+  overflow:hidden;
+  
+  
+}
+
+.mainBox{
+  border:var(--border-card-level1);
+  background-color:var(--background-card-level1);
+  min-height: 50vh;
+  border-radius: 1rem;
+  padding:0.5em;
+
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
+
+.inputFeatures{
+  display: flex;
+  flex-direction: column;
+}
+
+
+.questineerForm{
+  display: flex;
+  flex-direction: column;
+
+}
+
+.questineerForm button{
+  margin-top:1rem;
+}
+
+
+
+
+:root{
+  --test-border: 1px solid black;
+  --border-card-level1:2px solid rgb(77, 77, 124);
+  --background-card-level1: lightblue;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
