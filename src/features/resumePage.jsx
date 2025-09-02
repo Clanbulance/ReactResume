@@ -2,7 +2,7 @@ import React from "react";
 
 
 function ResumePage({
-    formData
+    personalData,
 }
     
 
@@ -10,7 +10,11 @@ function ResumePage({
     return(
         <>
         <div className="resumePage">
-        This will be our ResumePage form with shared props {formData.personal.name}
+        This will be our ResumePage form with shared props
+        {personalData.name}
+        {personalData.familyName}
+        {personalData.dateOfBirth}
+        {personalData.phoneNumber}    
         </div>
         </>
     )

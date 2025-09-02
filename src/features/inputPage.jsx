@@ -7,12 +7,23 @@ function InputPage({
     QuestionTabs,
     ActiveTab,
     changeActiveTab,
-    formData,
-    setFormData
-}
-    
+    personalData,
+    changePersonalData}){
 
-){
+    const renderQuestionList = () => {
+    switch (ActiveTab) {
+      case "personal":
+        return <Personal personalData={personalData} changePersonalData={changePersonalData} />;
+      case "skillset":
+        return <Skillset />;
+      case "education":
+        return <Education />;
+      default:
+        return null;
+    }
+  };
+
+
     return (
         <div className="inputPage">
             <div className="mainBox">
@@ -27,7 +38,7 @@ function InputPage({
                 </div>
 
                 <div className="LoadedFeatures">
-                        {QuestionTabs.find(item => item.tab === ActiveTab)?.questionList}
+                        {renderQuestionList()}
                     </div>
 
             </div>
