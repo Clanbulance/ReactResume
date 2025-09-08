@@ -41,8 +41,6 @@ return (
         value={personalData.phoneNumber}
         onChange={(e) => changePersonalData("phoneNumber", e.target.value)}
       />
-
-      <button type="submit">Submit</button>
     </div>
     )
 }

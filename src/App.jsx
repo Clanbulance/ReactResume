@@ -11,6 +11,8 @@ import Skillset from './features/questioneers/skillset'
 
 function App() {
 
+
+  /* PERSONAL DATA DATA*/
   const [personalData, setPersonalData] = useState({
       name: "",
       familyName: "",
@@ -24,6 +26,58 @@ function App() {
       ...prevData, [field]: newValue
     }));
   }
+
+    /* SKILLSET DATA DATA*/
+    const [SkillsetData, setSkillsetData] = useState({
+      Stupidity_lvl: "",
+      Javascript: "",
+      html: "",
+      css: ""
+  });
+
+  function changeSkillsetData(field, newValue){
+    console.log(SkillsetData)
+    setSkillsetData(prevData => ({
+      ...prevData, [field]: newValue
+    }));
+  }
+
+
+  /* EDUCATION DATA */ 
+
+  const [education, setEducation] = useState([
+    {
+      schoolName: "",
+      titleOfStudy: "",
+      dateOfStudy: ""
+    }
+  ]);
+
+  function addEducation(){
+    setEducation(prevEducation => ([
+      ...prevEducation,
+      {
+        schoolName: "",
+        titleOfStudy: "",
+        dateOfStudy: ""
+      }
+    ]));
+  }
+
+  function changeEducation(index, field, newValue){
+    const updatedEducation = education.map((edu, i) => {
+      if(i === index){
+        return {...edu, [field]: newValue};
+      }
+      return edu;
+    });
+    setEducation(updatedEducation);
+  }
+
+  function removeEducation(index){
+    setEducation(prevEducation => prevEducation.filter((_, i) => i !== index));
+  }   
+
 
   /* based on the active app we will load the right questioneer list*/
   const [ActiveTab,setActiveTab] = useState('personal')
@@ -39,8 +93,23 @@ function changeActiveTab(newActive){
 }
   return (
     <>
-      <InputPage QuestionTabs={QuestionTabs} ActiveTab={ActiveTab} changeActiveTab={changeActiveTab} personalData={personalData} changePersonalData={changePersonalData} />
-      <ResumePage personalData={personalData} />
+      <InputPage  QuestionTabs={QuestionTabs} 
+                  ActiveTab={ActiveTab} 
+                  changeActiveTab={changeActiveTab} 
+                  personalData={personalData} 
+                  changePersonalData={changePersonalData} 
+                  SkillsetData={SkillsetData} 
+                  changeSkillsetData={changeSkillsetData}
+                  education={education}
+                  changeEducation={changeEducation}
+                  addEducation={addEducation}
+                  removeEducation={removeEducation}
+
+                  />
+      <ResumePage  
+                  personalData={personalData}
+                  SkillsetData={SkillsetData}
+                  education={education} />
     </>
   )
 }

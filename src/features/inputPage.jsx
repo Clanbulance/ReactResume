@@ -8,16 +8,23 @@ function InputPage({
     ActiveTab,
     changeActiveTab,
     personalData,
-    changePersonalData}){
+    changePersonalData,
+    SkillsetData,
+    changeSkillsetData,
+    education,
+    changeEducation,
+    addEducation,
+    removeEducation
+}){
 
     const renderQuestionList = () => {
     switch (ActiveTab) {
       case "personal":
         return <Personal personalData={personalData} changePersonalData={changePersonalData} />;
       case "skillset":
-        return <Skillset />;
+        return <Skillset SkillsetData={SkillsetData} changeSkillsetData={changeSkillsetData}/>;
       case "education":
-        return <Education />;
+        return <Education  education={education} changeEducation={changeEducation} addEducation={addEducation} removeEducation={removeEducation} />;
       default:
         return null;
     }
