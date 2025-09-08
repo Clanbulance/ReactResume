@@ -1,54 +1,51 @@
 import React from "react";
 
-function Skillset(
-    {SkillsetData, changeSkillsetData}
-){
-    return ( 
-        <div className="questineerForm">
-             <label htmlFor="Stupidity_lvl">How dumb are you:</label>
-             <input
-               type="text"
-               id="Stupidity_lvl"
-               name="Stupidity_lvl"
-               value={SkillsetData.stupidity_lvl}
-               onChange={(e) => changeSkillsetData("Stupidity_lvl", e.target.value)}
-             />
+const skillLevels = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
-             <label htmlFor="Javascript">Javascript knowledge:</label>
-             <input
-               type="range"
-               min="0"
-               max="10"
-               id="Javascript"
-               name="Javascript"
-               value={SkillsetData.Javascript}
-               onChange={(e) => changeSkillsetData("Javascript", e.target.value)}
-             /> 
+function Skillset({ skillset, addSkill, changeSkill, removeSkill }) {
+  return (
+    <div className="questineerForm">
+      <button type="button" className="add-btn" onClick={addSkill}>
+        + Add Skill
+      </button>
 
-             <label htmlFor="html">HTML Knowledge</label>
-             <input
-               type="range"
-                min="0"
-               max="10"
-               id="html"
-               name="html"
-               value={SkillsetData.html}
-               onChange={(e) => changeSkillsetData("html", e.target.value)}
-             />
+      {skillset.map((skill, index) => (
+        <div key={index} className="form-group-container">
+          <label htmlFor={`skillName-${index}`}>Skill Name:</label>
+          <input
+            type="text"
+            id={`skillName-${index}`}
+            name="name"
+            placeholder="e.g., React"
+            value={skill.name}
+            onChange={(e) => changeSkill(index, "name", e.target.value)}
+          />
 
-             <label htmlFor="css">CSS knowledge</label>
-             <input
-               type="range"
-               min="0"
-               max="10"
-               id="css"
-               name="css"
-               value={SkillsetData.css}
-               onChange={(e) => changeSkillsetData("css", e.target.value)}
-             />
+          <label>Level:</label>
+          <div className="radio-group">
+            {skillLevels.map((level) => (
+              <label key={level} className="radio-label">
+                <input
+                  type="radio"
+                  name={`skillLevel-${index}`}
+                  value={level}
+                  checked={skill.level === level}
+                  onChange={(e) => changeSkill(index, "level", e.target.value)}
+                />
+                {level}
+              </label>
+            ))}
+          </div>
 
-           </div>
-           )
+          {skillset.length > 1 && (
+            <button type="button" className="remove-btn" onClick={() => removeSkill(index)}>
+              X
+            </button>
+          )}
+        </div>
+      ))}
+    </div>
+  );
 }
 
-export default Skillset
+export default Skillset;

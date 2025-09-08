@@ -1,50 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import InputPage from './features/inputPage'
-import ResumePage from './features/resumePage'
-import Education from './features/questioneers/education'
-import Personal from './features/questioneers/personal'
-import Skillset from './features/questioneers/skillset'
-
+import { useState } from 'react';
+import './App.css';
+import InputPage from './features/inputPage';
+import ResumePage from './features/resumePage';
 
 function App() {
-
-
-  /* PERSONAL DATA DATA*/
+  /* PERSONAL DATA */
   const [personalData, setPersonalData] = useState({
-      name: "",
-      familyName: "",
-      dateOfBirth: "",
-      phoneNumber: ""
+    name: "",
+    familyName: "",
+    dateOfBirth: "",
+    phoneNumber: ""
   });
 
-  function changePersonalData(field, newValue){
-    console.log(personalData)
+  function changePersonalData(field, newValue) {
     setPersonalData(prevData => ({
       ...prevData, [field]: newValue
     }));
   }
 
-    /* SKILLSET DATA DATA*/
-    const [SkillsetData, setSkillsetData] = useState({
-      Stupidity_lvl: "",
-      Javascript: "",
-      html: "",
-      css: ""
-  });
+  /* SKILLSET DATA - NEW DYNAMIC STRUCTURE */
+  const [skillset, setSkillset] = useState([
+    { name: "JavaScript", level: "Advanced" }
+  ]);
 
-  function changeSkillsetData(field, newValue){
-    console.log(SkillsetData)
-    setSkillsetData(prevData => ({
-      ...prevData, [field]: newValue
-    }));
+  function addSkill() {
+    setSkillset(prev => [{ name: "", level: "Beginner" }, ...prev]);
   }
 
+  function changeSkill(index, field, value) {
+    const newSkillset = skillset.map((skill, i) => {
+      if (i === index) {
+        return { ...skill, [field]: value };
+      }
+      return skill;
+    });
+    setSkillset(newSkillset);
+  }
 
-  /* EDUCATION DATA */ 
+  function removeSkill(index) {
+    if (skillset.length > 1) {
+      setSkillset(prev => prev.filter((_, i) => i !== index));
+    }
+  }
 
+  /* EDUCATION DATA */
   const [education, setEducation] = useState([
     {
       schoolName: "",
@@ -53,7 +52,7 @@ function App() {
     }
   ]);
 
-  function addEducation(){
+  function addEducation() {
     setEducation(prevEducation => ([
       ...prevEducation,
       {
@@ -64,56 +63,130 @@ function App() {
     ]));
   }
 
-  function changeEducation(index, field, newValue){
+  function changeEducation(index, field, newValue) {
     const updatedEducation = education.map((edu, i) => {
-      if(i === index){
-        return {...edu, [field]: newValue};
+      if (i === index) {
+        return { ...edu, [field]: newValue };
       }
       return edu;
     });
     setEducation(updatedEducation);
   }
 
-  function removeEducation(index){
-    setEducation(prevEducation => prevEducation.filter((_, i) => i !== index));
-  }   
+  function removeEducation(index) {
+    // Prevent removing the last item
+    if (education.length > 1) {
+      setEducation(prevEducation => prevEducation.filter((_, i) => i !== index));
+    }
+  }
 
+  /* WORK EXPERIENCE DATA */
+  const [workExperience, setWorkExperience] = useState([
+    {
+      companyName: "",
+      jobTitle: "",
+      startDate: "",
+      endDate: ""
+    }
+  ]);
 
-  /* based on the active app we will load the right questioneer list*/
-  const [ActiveTab,setActiveTab] = useState('personal')
-  const [QuestionTabs, setQuestions] = useState([
-    {tab: "personal", icon: "data:image/png;base64,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"}, 
-    {tab: "skillset", icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAD4ElEQVR4nO2ZWYgUVxSGv9FEzOjgghmcMXkI7uK++2ACghB8ERGdHoy4vLkiwQXxwUAQEUSHiSskAfMgYUIYBJEElwQSfVCJ4iiKC4oaxRVjYNzGabnyF1yK6qrqqls9LfhB0U3Xuefc03XuOffcgve85QNgIvA1sA84DtwGHgNtwGt9vwucBH4BvgFmAD0oAyYDe4BHQD7h9QL4DZgPdCm1A1OBP3wTOg/sBhYBnwOfAL2AzkCFvtcAk4C5wGbgmBzxdJgnthL4MGsHTBh8D7TL8APgW2BwCp09gQXAKd+fMoqMGAJckqFWYAPQzbGNL4GLsvFM4eaU0dY6+AcYQHZ0BXbKlnnyy1wpHqgQMoqbgUpKw0o5YjLe7LTKugMtcuKgw6zirYUo1kjuf6B/GoONUnQBqEqhJwdUhzhSLZkg9kv2z6TGx6mYvQRGJlWiCbbrydYr5XqOHNNvLZIJcqYXcF/yiULsoAZvJR3VVniGXS2+pxYUYmcpkhFWbPYhPfXS9xxYrcJYowk+171CoYXS/D3JfUERbNOgHbjBCyfjhJ+1unc0QsdGyX0X16jZTvyrQeNJhz98zFPwUxsgFxYltzTHSEZZAygjRwxXdX8CMVgu4R+JT9QEvNAya8LPupihZZeDFcTgBwkvdVgXctZiX6unUCsnXsRY7B6LJWs2rpH8JeFpMepCnf5Jz5Gj+s2uCy7Sr8cEyZrmLJIbEi5UBIudmO14LsDxXERBtKnU3ss8xc+I4KmMmMaoEHUx6oJpnlxsUfz8pLG/EsErCX4UInMkRl047GDTGEStCnVY+L+lNcQRf/j0DZDpW0Q6Tcp6azNrDj4CuSmhTxPWhX4lcKQLcFm6CzZeZyQwpgR1IQ0zZech0DtIoFkC80KUuKoLaTkctif0tsy7Cgz+GDgXI/1eLBB6LhmqfqktqFxMsY5kgnBZF1zQKNs/By0k78Sk0NmSy7rg4nAkD1wPurldN82xTByyyk5RDNdxq7H9e5DAMN38T2ui3BgONGm7ktdxlTl7C+3Z91JeNFkOmOLdEJVUBimVmkFjKR/yuhqU8mOxRYP+jtteloB8kvVYZfXvX1Ee5JMmlvkaeLsU7y2ydKTCquR2j9FR5NOk+iUabDaLHUknzcMkoERUqZlpLyZTZECNHLmTRolXV0q19QhiluZg3l8mxmthzQvPjuKQ5rAq7Ztco+QEHUPOaqTMq4bEDJCiK5Seer0cNfYXung1bRQ9wT1zgOk6NDd/WD9tkeqsLtBcm1wZzGq7HtVtPnK9s8jakdM6cb+mzwM6VO+elcF3RW9B3jtSpq0yZcsb34GrNuYRrHoAAAAASUVORK5CYII="},
-    {tab: "education", icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFEElEQVR4nO2aTWxVRRTHf62VPlIivge1usBYFkYD0ULcuJWoVFIp7lB0YVDcFLSQ6EZo2FnZiGnC0rhwyaKIiEYE/Ij4ARoTsJSyQYhBLHFh+eaZE/+TnFzuu+/e19t3G8M/meTeO2fOnJk558yZMxdu4/+LCtAPvAvsBX4DJoErKvZ8QnVGsxooM0tQAl4EPgNuANWM5TqwH1gHtBcxgLnAZuCcE+oycAB4WyvzsGb8TpWyvlndVuBLtQntzwKDmpymYBUw4QT4AVgPzG+A193AK8CPjt8poJcZhM3ULtfhT8BTOfJfCRxz/EdmYnXuleDWwT/AAHBH3p3wH89NwJRb7a68mHdruavyOkuZeTwCjKnPcckwLXQ6ht8DC2keysDX6ntCWtEQSk6dvgU6aD46gO+cmjVkM7ucOtlmVxQWOK0wB5DZxQbDboZNpLGZKclk3i31Zhf2CfNOswWvO+NPpWJb3D4xHRc7TxNxUmVA3xpFG/CzZLNBJaJdoYIRP9lgh+ZdhoC/YmKrv4H3gPsb5P2M+JyrtyrrnIfIiseAj4CrTvDDwBqVw+77VdFamyxocZ70+STCz0VksVMatAJ9rl1VUfAe4PEY+mXAh5HBWpz1klQnDTao3b5aBBWF1ZdTBIBB/8OOb+Ui8A6wKIUwi0R7MRIsDqSwo7LON9dqyblGDL/IqP/m4d5UJJsVJvSr2quy2NEh0Zo23IIdqrTzRBb9N/WaLloz2tGQaIbjmO1V5bMN6n9eWJbCjoL2jMYxOKlKO8XhArag/8Mx+m/vazVDHwAHtWGd1hl90vEI76fV10G1GRKPON5RO/pKdUv0bnmBW3BBlRbbGL5xDLbK9QU8pGPtzQbO6bWK8Tog3gEtUvVAYzKhKNze/4wbyBVVznGhyogT1pIE96lu3J3TLfGwHXgZeAJ4UOeHciRLEt67RbNCbbaLRzi/22oFx/KpG+SIZAobd+i/7kAC+tyMnI+830V+MF6Bb5/68n16JA4kqloeURUIz3mjGunDa4FHompFjT2ug8FICmeu1MkCzffl0X7V3nJexn1TZVLfJkSzR222iIfxCnytjzcidumRaOwfq3J1wkAMj7r3Szkau+dlfSQh0f3ucB4qaSBE9hVL4exU9sMmoQdYrPN+WbPaoudO1fWIdpPaHotkKushcUPsV6VlAKOIdnC8xkCMx3IJ2yXhW1XK+rZYNP01BnK87jDqhChlFzT6uGmFG4g9I2F2O0+XRzFeu8U7CRUXNNb0mvvF1NKYAT7CtWcPY/S08sA7pbO/yKD/kIHfUJnUtwnRjKrNZvFI68pfkyyfJBG94GKbqDfzm1VRaAGOShYLa2qi5I66NkuGt9xA7LlIrJIcZ9JcQwyK+KiSDx1qeKagJF1Am1TSZNtICpScXZhXQR7GSpEYlExjWS6FetVoSsmxotHjNszMVxkjbgbi4q9modNF2+blMqOktFBVieQi7GMecEQyHJnOPWOnArNwrWDvzULFHe5O5XHh0+2WdixFQJeXTYy7veuBvBh3OTWbUu41bUItC9rknS45dbon705KzgFUlVDuzXHHts0u7BPBsGf07n2lW/aqcrEbGvyLoaLYKYQdValSnrfFdVfH1Ov3SPRq4fU2HXyWyG3PUVmgS6PnRHMoEj1b5LCxqD8g2pUV36cjQNbQ/ZoSg2uLGkAc5uugM6zz+AklNMJPNRd0aBoVTV/OWZjbYDbhXxK1LJe5B/MJAAAAAElFTkSuQmCC"}
-])
+  function addWorkExperience() {
+    setWorkExperience(prevExperience => ([
+      ...prevExperience,
+      {
+        companyName: "",
+        jobTitle: "",
+        startDate: "",
+        endDate: ""
+      }
+    ]));
+  }
 
+  function changeWorkExperience(index, field, newValue) {
+    const newWorkExperience = workExperience.map((exp, i) => {
+        if (i === index) {
+            return { ...exp, [field]: newValue };
+        }
+        return exp;
+    });
+    setWorkExperience(newWorkExperience);
+  }
 
-function changeActiveTab(newActive){
-  setActiveTab(newActive)
-}
+  function removeWorkExperience(index) {
+    // Prevent removing the last item
+    if (workExperience.length > 1) {
+      setWorkExperience(prevExperience => prevExperience.filter((_, i) => i !== index));
+    }
+  }
+
+  /* TAB MANAGEMENT */
+  const [ActiveTab, setActiveTab] = useState('personal');
+  const [QuestionTabs] = useState([
+    { tab: "personal", icon: "👤" },
+    { tab: "skillset", icon: "⭐" },
+    { tab: "education", icon: "🎓" },
+    { tab: "experience", icon: "💼" }
+  ]);
+
+  /* AI STYLE TOGGLE - Now with multiple themes! */
+  const themes = ['theme-corporate', 'theme-creative', 'theme-minimalist'];
+  const [activeTheme, setActiveTheme] = useState('default');
+
+  const changeTheme = () => {
+    if (activeTheme === 'default') {
+      // Pick a random theme from the list
+      const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+      setActiveTheme(randomTheme);
+    } else {
+      // Revert to default
+      setActiveTheme('default');
+    }
+  };
+
+  function changeActiveTab(newActive) {
+    setActiveTab(newActive);
+  }
+
   return (
-    <>
-      <InputPage  QuestionTabs={QuestionTabs} 
-                  ActiveTab={ActiveTab} 
-                  changeActiveTab={changeActiveTab} 
-                  personalData={personalData} 
-                  changePersonalData={changePersonalData} 
-                  SkillsetData={SkillsetData} 
-                  changeSkillsetData={changeSkillsetData}
-                  education={education}
-                  changeEducation={changeEducation}
-                  addEducation={addEducation}
-                  removeEducation={removeEducation}
+    <div className="page-wrapper">
+      <header className="top-toolbar">
+        <button type="button" className="ai-style-btn" onClick={changeTheme}>
+          {activeTheme === 'default' ? '✨ AI-ify Resume Style' : '🪄 Revert to Original Style'}
+        </button>
+      </header>
 
-                  />
-      <ResumePage  
-                  personalData={personalData}
-                  SkillsetData={SkillsetData}
-                  education={education} />
-    </>
-  )
+      <div className="app-container">
+        <InputPage
+          QuestionTabs={QuestionTabs}
+          ActiveTab={ActiveTab}
+          changeActiveTab={changeActiveTab}
+          personalData={personalData}
+          changePersonalData={changePersonalData}
+          skillset={skillset}
+          addSkill={addSkill}
+          changeSkill={changeSkill}
+          removeSkill={removeSkill}
+          education={education}
+          changeEducation={changeEducation}
+          addEducation={addEducation}
+          removeEducation={removeEducation}
+          workExperience={workExperience}
+          changeWorkExperience={changeWorkExperience}
+          addWorkExperience={addWorkExperience}
+          removeWorkExperience={removeWorkExperience}
+        />
+        <ResumePage
+          personalData={personalData}
+          skillset={skillset}
+          education={education}
+          workExperience={workExperience}
+          activeTheme={activeTheme}
+        />
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
 
 

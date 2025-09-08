@@ -1,57 +1,115 @@
 import React from "react";
 
-
 function ResumePage({
     personalData,
-    SkillsetData,
-    education
+    skillset,
+    education,
+    workExperience,
+    activeTheme
+}) {
+    const isAiStyled = activeTheme !== 'default';
 
-}
-    
+    // Component for a single experience/education item
+    const ExperienceItem = ({ title, subtitle, date, dateTo }) => (
+        <div className="experience-item">
+            <div className="item-header">
+                <span className="item-title">{title}</span>
+                <span className="item-dates">{date}{dateTo && ` to ${dateTo}`}</span>
+            </div>
+            <span className="item-subtitle">{subtitle}</span>
+        </div>
+    );
 
-){
-    return(
+    // The default, single-column layout
+    const DefaultLayout = () => (
         <>
-        <div className="resumePage">
-            <div className="PersonalData"><h2>Personal Data</h2>
-            <div>{personalData.name}</div>
-            <div>{personalData.familyName}</div>
-            <div>{personalData.dateOfBirth}</div>
-            <div>{personalData.phoneNumber}</div>
-            </div>
-            <div className="skillsetData"><h2>Skill Levels</h2>
-            <div>Stupidity:     {SkillsetData.Stupidity_lvl}</div>
-            <div>Javascript:    {SkillsetData.Javascript}</div>
-            <div>HTML:  {SkillsetData.html}</div>
-            <div>CSS: {SkillsetData.css}</div>
-            </div>
-            <div className="educationData"><h2>Education</h2>
-                <table className="educationTable"> 
-                    <tr>
-                        <th>School</th>
-                        <th>Study</th>
-                        <th>Time</th>
-                    </tr>
-                    {education.map((edu,index) => (
-                        <tr key={index}>
-                            <td>{edu.schoolName}</td>
-                            <td>{edu.titleOfStudy}</td>
-                            <td>{edu.dateOfStudy}</td>
-                        </tr>
+            <header className="resume-header">
+                <h1>{personalData.name} {personalData.familyName}</h1>
+                <div className="contact-info">
+                    <span>{personalData.dateOfBirth}</span>
+                    <span>{personalData.phoneNumber}</span>
+                </div>
+            </header>
+            <section className="resume-section">
+                <h2>Skills</h2>
+                <div className="skills-container">
+                    {skillset.map((skill, index) => (
+                        skill.name && <span key={index} className="skill-tag">{skill.name}: {skill.level}</span>
                     ))}
-                    
-                </table>
- 
- 
-            </div>
-        
-
-
-
-
-        </div> 
+                </div>
+            </section>
+            <section className="resume-section">
+                <h2>Work Experience</h2>
+                <div className="experience-list">
+                    {workExperience.map((exp, index) => (
+                        <ExperienceItem key={index} title={exp.jobTitle} subtitle={exp.companyName} date={exp.startDate} dateTo={exp.endDate} />
+                    ))}
+                </div>
+            </section>
+            <section className="resume-section">
+                <h2>Education</h2>
+                <div className="experience-list">
+                    {education.map((edu, index) => (
+                        <ExperienceItem key={index} title={edu.titleOfStudy} subtitle={edu.schoolName} date={edu.dateOfStudy} />
+                    ))}
+                </div>
+            </section>
         </>
-    )
+    );
+
+    // The new, two-column "AI" layout
+    const AiLayout = () => (
+        <>
+            <header className="resume-header">
+                <h1>{personalData.name} {personalData.familyName}</h1>
+            </header>
+            <main className="resume-main-content">
+                <aside className="resume-sidebar">
+                    <section className="resume-section">
+                        <h2>Contact</h2>
+                        <div className="contact-details">
+                            <span>{personalData.phoneNumber}</span>
+                            <span>{personalData.dateOfBirth}</span>
+                        </div>
+                    </section>
+                    <section className="resume-section">
+                        <h2>Skills</h2>
+                        <div className="skills-container">
+                            {skillset.map((skill, index) => (
+                                skill.name && <span key={index} className="skill-tag">{skill.name}</span>
+                            ))}
+                        </div>
+                    </section>
+                </aside>
+                <div className="resume-body">
+                    <section className="resume-section">
+                        <h2>Work Experience</h2>
+                        <div className="experience-list">
+                            {workExperience.map((exp, index) => (
+                                <ExperienceItem key={index} title={exp.jobTitle} subtitle={exp.companyName} date={exp.startDate} dateTo={exp.endDate} />
+                            ))}
+                        </div>
+                    </section>
+                    <section className="resume-section">
+                        <h2>Education</h2>
+                        <div className="experience-list">
+                            {education.map((edu, index) => (
+                                <ExperienceItem key={index} title={edu.titleOfStudy} subtitle={edu.schoolName} date={edu.dateOfStudy} />
+                            ))}
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </>
+    );
+
+    return (
+        <div className="resume-preview-container">
+            <div className={`resume-sheet ${activeTheme}`}>
+                {isAiStyled ? <AiLayout /> : <DefaultLayout />}
+            </div>
+        </div>
+    );
 }
 
-export default ResumePage
+export default ResumePage;

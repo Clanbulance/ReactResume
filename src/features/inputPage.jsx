@@ -2,6 +2,7 @@ import React from "react";
 import Education from "./questioneers/education";
 import Personal from "./questioneers/personal";
 import Skillset from "./questioneers/skillset";
+import WorkExperience from "./questioneers/workExperience";
 
 function InputPage({
     QuestionTabs,
@@ -9,12 +10,18 @@ function InputPage({
     changeActiveTab,
     personalData,
     changePersonalData,
-    SkillsetData,
-    changeSkillsetData,
+    skillset,
+    addSkill,
+    changeSkill,
+    removeSkill,
     education,
     changeEducation,
     addEducation,
-    removeEducation
+    removeEducation,
+    workExperience,
+    changeWorkExperience,
+    addWorkExperience,
+    removeWorkExperience
 }){
 
     const renderQuestionList = () => {
@@ -22,9 +29,11 @@ function InputPage({
       case "personal":
         return <Personal personalData={personalData} changePersonalData={changePersonalData} />;
       case "skillset":
-        return <Skillset SkillsetData={SkillsetData} changeSkillsetData={changeSkillsetData}/>;
+        return <Skillset skillset={skillset} addSkill={addSkill} changeSkill={changeSkill} removeSkill={removeSkill} />;
       case "education":
         return <Education  education={education} changeEducation={changeEducation} addEducation={addEducation} removeEducation={removeEducation} />;
+      case "experience":
+        return <WorkExperience workExperience={workExperience} changeWorkExperience={changeWorkExperience} addWorkExperience={addWorkExperience} removeWorkExperience={removeWorkExperience} />;
       default:
         return null;
     }
@@ -37,17 +46,16 @@ function InputPage({
 
                 <div className="inputFeatures">
                     {QuestionTabs.map((tabs) => 
-                        <div key={tabs.tab} className="FeatureItems">
-                            <img src={tabs.icon} onClick={() => changeActiveTab(tabs.tab)}></img>
-                            <a onClick={() => changeActiveTab(tabs.tab)}>{tabs.tab}</a>
+                        <div key={tabs.tab} className={`FeatureItems ${ActiveTab === tabs.tab ? 'active' : ''}`} onClick={() => changeActiveTab(tabs.tab)}>
+                            <span className="feature-icon">{tabs.icon}</span>
+                            <a>{tabs.tab}</a>
                         </div>
                         )}
                 </div>
 
                 <div className="LoadedFeatures">
                         {renderQuestionList()}
-                    </div>
-
+                </div>
             </div>
         </div>
    
